@@ -13,17 +13,28 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('blood_id');
+            $table->unsignedBigInteger('hospital_id');
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
             $table->integer('age');
-            $table->char('phone');
+            $table->string('phone')->unique();
             $table->boolean('gender');
-            $table->char('blood_type');
             $table->string('location');
-            $table->dateTime('date_and_time');
-            $table->integer('request_id');
+            $table->dateTime('donation_date');
+            $table->integer('request_id')->nullable();
+            $table->integer('role')->default(0);  // 0 -> default user | 1 -> admin | 2 -> super admin.
             $table->timestamps();
+
+
+            $table->foreign('blood_id')->constrained('users_blood_id_foreign')->references('id')->on('bloods')->onDelete('cascade');
+
+            $table->foreign('hospital_id')
+            ->constrained('users_hospital_id_foreign')
+            ->references('id')
+            ->on('hospitals')
+            ->onDelete('cascade');
         });
     }
 

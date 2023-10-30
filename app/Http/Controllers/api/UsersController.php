@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Users;
+use App\Models\User;
 use App\Http\Requests\StoreUsersRequest;
 use App\Http\Requests\UpdateUsersRequest;
 use App\Http\Resources\UsersResource;
@@ -15,7 +15,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        return Users::all();
+        return User::all();
     }
 
 
@@ -25,7 +25,7 @@ class UsersController extends Controller
      */
     public function store(StoreUsersRequest $request)
     {
-        $user = Users::create($request->validated());
+        $user = User::create($request->validated());
         return UsersResource::make($user);
     }
 
@@ -34,7 +34,7 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        $user = Users::findOrFail($id);
+        $user = User::findOrFail($id);
         return response()->json($user);
     }
 
@@ -43,7 +43,7 @@ class UsersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUsersRequest $request, Users $ebloodbankuser)
+    public function update(UpdateUsersRequest $request, User $ebloodbankuser)
     {
         $ebloodbankuser->update($request->all());
 
@@ -53,7 +53,7 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Users $ebloodbankuser)
+    public function destroy(User $ebloodbankuser)
     {
         $ebloodbankuser->delete();
         return response()->noContent();
