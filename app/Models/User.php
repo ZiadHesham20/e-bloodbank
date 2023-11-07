@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Model
 {
     use HasFactory;
-    
+
     protected $guarded = [];
 
     public function blood()
@@ -29,5 +29,9 @@ class User extends Model
     public function medicines()
     {
         return $this->belongsToMany(Medicine::class, 'user_medicines');
+    }
+    public function requests()
+    {
+        return $this->hasMany(Request::class, 'sender_id');
     }
 }

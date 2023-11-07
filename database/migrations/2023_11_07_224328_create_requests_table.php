@@ -11,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hospitals', function (Blueprint $table) {
+        Schema::create('requests', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('about');
-            $table->string('email')->unique();
-            $table->string('phone')->unique();
-            $table->text('address');
-            $table->double('latitude');
-            $table->double('longitude');
-
+            $table->boolean('request_type');
+            $table->unsignedBigInteger('sender_id');
+            $table->foreign('sender_id')->references('id')->on('hospital');
+            $table->foreign('sender_id')->references('id')->on('users');
+            $table->boolean('role');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hospitals');
+        Schema::dropIfExists('requests');
     }
 };

@@ -23,7 +23,6 @@ return new class extends Migration
             $table->boolean('gender');
             $table->string('location');
             $table->dateTime('donation_date');
-            $table->integer('request_id')->nullable();
             $table->integer('role')->default(0);  // 0 -> default user | 1 -> admin | 2 -> super admin.
             $table->timestamps();
 

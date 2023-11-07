@@ -26,7 +26,6 @@ class UserFactory extends Factory
             'phone' =>fake()->phoneNumber(),
             'gender' =>fake()->boolean(),
             'location' =>fake()->city(),
-            'request_id' =>fake()->randomNumber(),
             'donation_date' =>fake()->dateTime(),
         ];
     }

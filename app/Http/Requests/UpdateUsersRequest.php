@@ -31,7 +31,7 @@ class UpdateUsersRequest extends FormRequest
             "blood_type"=> "required",
             "location"=> "required",
             "date_and_time"=> "required",
-            "request_id"=> "required"
+
         ];
     }
 }
