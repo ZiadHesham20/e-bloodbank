@@ -13,12 +13,12 @@ class User extends Model
 
     public function blood()
     {
-        $this->hasOne(Blood::class);
+        return $this->hasOne(Blood::class);
     }
 
     public function hospital()
     {
-        $this->belongsTo(Hospital::class);
+        return $this->belongsTo(Hospital::class);
     }
 
     public function diseases()
@@ -30,8 +30,9 @@ class User extends Model
     {
         return $this->belongsToMany(Medicine::class, 'user_medicines');
     }
-    public function requests()
+
+    public function hospitalsRequest()
     {
-        return $this->hasMany(Request::class, 'sender_id');
+        return $this->belongsToMany(Hospital::class, 'hospital_users');
     }
 }

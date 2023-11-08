@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Request;
+use App\Models\HospitalUser;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class RequestSeeder extends Seeder
+class HospitalUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Request::factory()->count(100)->create();
+        HospitalUser::factory()->count(50)->create();
     }
 }

@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('requests', function (Blueprint $table) {
+        Schema::create('hospital_users', function (Blueprint $table) {
             $table->id();
-            $table->boolean('request_type');
-            $table->unsignedBigInteger('sender_id');
-            $table->foreign('sender_id')->references('id')->on('hospital');
-            $table->foreign('sender_id')->references('id')->on('users');
-            $table->boolean('role');
+            $table->unsignedBigInteger('hospital_id');
+            $table->unsignedBigInteger('user_id');
+            $table->integer('type'); // if type = 0 -> user request to donate blood -- if type = 1 -> hospital need blood
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('requests');
+        Schema::dropIfExists('hospital_users');
     }
 };

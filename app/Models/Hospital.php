@@ -13,15 +13,16 @@ class Hospital extends Model
 
     public function users()
     {
-        $this->hasMany(User::class);
+        return $this->hasMany(User::class);
     }
 
     public function bloods()
     {
         return $this->belongsToMany(Blood::class, 'hospitals_blood');
     }
-    public function requests()
+
+    public function usersRequest()
     {
-        return $this->hasMany(Request::class, 'sender_id');
+        return $this->belongsToMany(User::class, 'hospital_users');
     }
 }
