@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('location');
             $table->dateTime('donation_date');
             $table->integer('role')->default(0);  // 0 -> default user | 1 -> admin | 2 -> super admin.
+            $table->integer('points')->default(0);
             $table->timestamps();
 
 
