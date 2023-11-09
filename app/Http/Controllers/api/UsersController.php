@@ -7,6 +7,9 @@ use App\Models\User;
 use App\Http\Requests\StoreUsersRequest;
 use App\Http\Requests\UpdateUsersRequest;
 use App\Http\Resources\UsersResource;
+use App\Models\Hospital;
+use App\Models\HospitalUser;
+use App\Models\Request;
 
 class UsersController extends Controller
 {
@@ -16,6 +19,9 @@ class UsersController extends Controller
     public function index()
     {
         return User::all();
+
+
+
     }
 
 
@@ -27,6 +33,7 @@ class UsersController extends Controller
     {
         $user = User::create($request->validated());
         return UsersResource::make($user);
+
     }
 
     /**
@@ -58,4 +65,8 @@ class UsersController extends Controller
         $ebloodbankuser->delete();
         return response()->noContent();
     }
+
+
+
 }
+
