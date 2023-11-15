@@ -37,5 +37,12 @@ class BloodSeeder extends Seeder
         $type8 = Blood::create([
             'type' => 'O-',
         ]);
+        $type9 = Blood::create([
+            'type' => 'plasma',
+        ]);
+        $type9 = Blood::create([
+            'type' => 'Platelets',
+        ]);
+
     }
 }

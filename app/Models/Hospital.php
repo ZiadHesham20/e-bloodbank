@@ -18,7 +18,7 @@ class Hospital extends Model
 
     public function bloods()
     {
-        return $this->belongsToMany(Blood::class, 'hospitals_blood');
+        return $this->belongsToMany(Blood::class, 'hospital_bloods');
     }
 
     public function usersRequest()
