@@ -7,12 +7,18 @@ use Illuminate\Http\Request;
 
 class BloodController extends Controller
 {
+    public $blood;
+
+    public function __construct(Blood $blood)
+    {
+        $this->blood = $blood;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $bloods = $this->blood::all();
     }
 
     /**
@@ -50,9 +56,11 @@ class BloodController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Blood $blood)
+    public function update(Request $request, $id)
     {
-        //
+        $blood = $this->blood::findOrFail($id);
+        $blood->update($request->price);
+        return $blood;
     }
 
     /**

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('bloods', function (Blueprint $table) {
             $table->id();
             $table->string('type');
+            $table->integer('price')->default(500);
             $table->timestamps();
         });
     }

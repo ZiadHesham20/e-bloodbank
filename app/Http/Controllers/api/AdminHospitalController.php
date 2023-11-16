@@ -119,8 +119,9 @@ class AdminHospitalController extends Controller
     {
         $authUser = auth()->user();
         $user = $this->user->findOrFail($id);
-        if ($authUser->role == 1 && $authUser->hospital_id == $user->hospital_id) {
+        if ($authUser->role == 1 && $authUser->hospital_id == $user->hospital_id && $user != $authUser) {
             $user->hospital_id = Null;
+            $user->role = 0;
             $user->save;
             return $user;
         } else {
