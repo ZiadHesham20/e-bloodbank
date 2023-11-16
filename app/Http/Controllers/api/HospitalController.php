@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Hospital;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +15,7 @@ class HospitalController extends Controller
 
     public function __construct(Hospital $hospital)
     {
-        $this->middleware('auth.basic.once')->except('index', 'show','searchByName');
+        $this->middleware('auth.basic.once')->except('index', 'show','searchByName','searchByaddress');
         $this->middleware('HospitalAdmin')->only('update');
         $this->hospital = $hospital;
     }
@@ -133,17 +134,21 @@ class HospitalController extends Controller
         return 204;
     }
 // search by name
-
+public function searchByName($name){
+    $hospital = $this->hospital::where('name','LIKE',$name)->first();
+    return response()->json($hospital);
+}
     // search by location
-
-    // by default show hospitals in my locaton
-    public function searchByName($name){
-        $hospital = $this->hospital::where('name','LIKE',$name)->first();
+    public function searchByaddress($address){
+        $hospital = $this->hospital::where('address','LIKE',$address)->first();
         return response()->json($hospital);
     }
-    public function searchByLocation(){
-            $hospital = $this->hospital::where('name','LIKE',$name)->first();
-            return response()->json($hospital);
+    // by default show hospitals in my locaton
+    public function getdafaulthospitals(){
+        $user = User::find(Auth::user()->id);
+        $hospital = $this->hospital::where('address','LIKE',$user->location)->first();
+        return response()->json($hospital);
 
     }
+
 }

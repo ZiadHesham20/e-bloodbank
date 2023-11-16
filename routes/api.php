@@ -59,3 +59,5 @@ Route::patch('/hospital/payBlood/{id}', [HospitalBloodController::class, 'payBlo
 Route::apiResource('/diseases', DiseaseController::class);
 Route::apiResource('/medicines', MedicineController::class);
 Route::get('/hospital/{name}',[HospitalController::class,'searchByName']);
+Route::get('/hospital/address/{address}',[HospitalController::class,'searchByaddress']);
+Route::get('/hospital/default/address',[HospitalController::class,'getdafaulthospitals']);
