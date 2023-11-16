@@ -15,7 +15,7 @@ class HospitalController extends Controller
 
     public function __construct(Hospital $hospital)
     {
-        $this->middleware('auth.basic.once')->except('index', 'show','searchByName','searchByaddress');
+        $this->middleware('auth.basic.once')->except('index', 'show');
         $this->middleware('HospitalAdmin')->only('update');
         $this->hospital = $hospital;
     }
@@ -135,18 +135,18 @@ class HospitalController extends Controller
     }
 // search by name
 public function searchByName($name){
-    $hospital = $this->hospital::where('name','LIKE',$name)->first();
+    $hospital = $this->hospital::where('name','LIKE',$name)->get();
     return response()->json($hospital);
 }
     // search by location
     public function searchByaddress($address){
-        $hospital = $this->hospital::where('address','LIKE',$address)->first();
+        $hospital = $this->hospital::where('address','LIKE',$address)->get();
         return response()->json($hospital);
     }
     // by default show hospitals in my locaton
     public function getdafaulthospitals(){
         $user = User::find(Auth::user()->id);
-        $hospital = $this->hospital::where('address','LIKE',$user->location)->first();
+        $hospital = $this->hospital::where('address','LIKE',$user->location)->get();
         return response()->json($hospital);
 
     }
