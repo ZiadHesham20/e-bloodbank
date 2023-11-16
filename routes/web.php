@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\api\UsersController;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,5 +17,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::resource('users',UsersController::class);
 
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
+
+Route::resource('users',UsersController::class);

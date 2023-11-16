@@ -15,8 +15,25 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('hospital_id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('blood_id');
             $table->integer('type'); // if type = 0 -> user request to donate blood -- if type = 1 -> hospital need blood
+            $table->boolean('done')->default(false);
             $table->timestamps();
+
+            $table->foreign('hospital_id')
+            ->references('id')
+            ->on('hospitals')
+            ->onDelete('cascade');
+
+            $table->foreign('user_id')
+            ->references('id')
+            ->on('users')
+            ->onDelete('cascade');
+
+            $table->foreign('blood_id')
+            ->references('id')
+            ->on('bloods')
+            ->onDelete('cascade');
         });
     }
 

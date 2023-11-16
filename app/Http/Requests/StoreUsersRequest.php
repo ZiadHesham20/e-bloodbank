@@ -30,7 +30,7 @@ class StoreUsersRequest extends FormRequest
             "gender"=> "required|boolean",
             "blood_type"=> "required",
             "location"=> "required",
-            "date_and_time"=> "required",
+            //"date_and_time"=> "required",
 
         ];
     }

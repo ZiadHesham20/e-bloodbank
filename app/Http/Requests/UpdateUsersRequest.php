@@ -28,9 +28,9 @@ class UpdateUsersRequest extends FormRequest
             "age"=>  "required|integer",
             "phone"=> "required",
             "gender"=> "required|boolean",
-            "blood_type"=> "required",
+            "blood_id"=> "required",
             "location"=> "required",
-            "date_and_time"=> "required",
+            //"date_and_time"=> "required",
 
         ];
     }

@@ -18,7 +18,7 @@ class HospitalBloodFactory extends Factory
     {
         return [
             'hospital_id' => $this->faker->numberBetween(1, 10),
-            'blood_id' => $this->faker->numberBetween(1, 8),
+            'blood_id' => $this->faker->numberBetween(1, 10),
         ];
     }
 }

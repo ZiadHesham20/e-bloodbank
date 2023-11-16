@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('hospitals', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('cover_image')->default('default.png');
             $table->text('about');
             $table->string('email')->unique();
             $table->string('phone')->unique();
             $table->text('address');
-            $table->double('latitude');
-            $table->double('longitude');
+            $table->double('latitude')->nullable();
+            $table->double('longitude')->nullable();
 
             $table->timestamps();
         });

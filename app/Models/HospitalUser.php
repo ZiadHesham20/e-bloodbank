@@ -8,5 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class HospitalUser extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id','hospital_id','type'];
+
+    public function blood()
+    {
+        $this->hasOne(Blood::class);
+    }
 }
