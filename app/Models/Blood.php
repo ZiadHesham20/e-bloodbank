@@ -9,7 +9,7 @@ class Blood extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['type'];
+    protected $fillable = ['type', 'price'];
 
     public function users()
     {

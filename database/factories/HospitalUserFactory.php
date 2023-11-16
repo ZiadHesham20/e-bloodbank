@@ -20,7 +20,7 @@ class HospitalUserFactory extends Factory
             'hospital_id' => $this->faker->numberBetween(1, 10),
             'user_id' => $this->faker->numberBetween(1, 100),
             'blood_id' => $this->faker->numberBetween(1, 10),
-            'type' => $this->faker->numberBetween(0, 1),
+            'type' => $this->faker->numberBetween(0, 2),
         ];
     }
 }

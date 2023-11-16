@@ -132,6 +132,11 @@ class HospitalController extends Controller
         $this->hospital::findOrFail($id)->delete();
         return 204;
     }
+// search by name
+
+    // search by location
+
+    // by default show hospitals in my locaton
     public function searchByName($name){
         $hospital = $this->hospital::where('name','LIKE',$name)->first();
         return response()->json($hospital);
