@@ -24,6 +24,7 @@ class HospitalController extends Controller
      */
     public function index()
     {
+        // where approved
         $hospitals = $this->hospital::paginate(10);
         return $hospitals;
     }
@@ -133,22 +134,24 @@ class HospitalController extends Controller
         $this->hospital::findOrFail($id)->delete();
         return 204;
     }
-// search by name
-public function searchByName($name){
-    $hospital = $this->hospital::where('name','LIKE',$name)->get();
-    return response()->json($hospital);
-}
+    // search by name
+    public function searchByName($name)
+    {
+        $hospital = $this->hospital::where('name','LIKE',$name)->get();
+        return response()->json($hospital);
+    }
     // search by location
-    public function searchByaddress($address){
+    public function searchByaddress($address)
+    {
         $hospital = $this->hospital::where('address','LIKE',$address)->get();
         return response()->json($hospital);
     }
     // by default show hospitals in my locaton
-    public function getdafaulthospitals(){
+    public function getdafaulthospitals()
+    {
         $user = User::find(Auth::user()->id);
         $hospital = $this->hospital::where('address','LIKE',$user->location)->get();
         return response()->json($hospital);
-
     }
 
 }

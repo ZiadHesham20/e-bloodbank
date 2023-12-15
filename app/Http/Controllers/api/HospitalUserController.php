@@ -46,18 +46,31 @@ class HospitalUserController extends Controller
     public function requestDonate(Request $request)
     {
         $user = Auth::user();
-        $hospitalId = intval($request->hospital_id);
-        $blood_id = intval($request->blood_id);
-        $request = new $this->request;
+        // if user donatable is 1 and last dontion > 6 months can do it
+        {
+            // Check if the user is marked as donatable
+            if ($user->donatable == 1) {
+                // Check if the last donation was more than 6 months ago
+                $lastDonation = Carbon::parse($user->donation_date); // Assuming you have a 'donations' relationship
 
-        $request->type = 0;
-        $request->user_id = $user->id;
-        $request->hospital_id = $hospitalId;
-        $request->blood_id = $blood_id;
+                if ($lastDonation->addMonths(6)->isPast()) {
+                    $hospitalId = intval($request->hospital_id);
+                    $blood_id = intval($request->blood_id);
+                    $request = new $this->request;
 
-        $request->save();
+                    $request->type = 0;
+                    $request->user_id = $user->id;
+                    $request->hospital_id = $hospitalId;
+                    $request->blood_id = $blood_id;
 
-        return $request;
+                    $request->save();
+
+                    return $request;
+                    // User can donate blood
+                }
+            }
+            return response()->json(['message' => 'you can not donate now'], 200); // User cannot donate blood
+        }
     }
 
     public function showDonorUser()
@@ -85,7 +98,7 @@ class HospitalUserController extends Controller
         return $usersRequset;
     }
 
-    // //admin
+    // admin
     public function showHospitalsRequest()
     {
         $hospitalsRequset = $this->request->where('type', 1)->get();

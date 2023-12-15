@@ -75,6 +75,21 @@ class User extends Authenticatable
         return $this->belongsToMany(Medicine::class, 'user_medicines');
     }
 
+    public function emergencyRequests()
+    {
+        return $this->hasMany(EmergencyRequest::class);
+    }
+
+    public function emergencyDonates()
+    {
+        return $this->hasMany(EmergencyDonate::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
     public function hospitalsRequest()
     {
         return $this->belongsToMany(Hospital::class, 'hospital_users');

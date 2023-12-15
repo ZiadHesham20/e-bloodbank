@@ -77,11 +77,11 @@ class AdminHospitalController extends Controller
         //
     }
 
-    public function changeRole(User $user)
+    public function changeRole($id)
     {
-        $authUser = Auth::user();
+        $user = $this->user::findOrFail($id);
+            $authUser = Auth::user();
         if ($authUser->hospital_id == $user->hospital_id){
-            $user = $this->user::findOrFail($user->id);
             if ($user->role == 0){
                 $user->update(['role'=>1]);
             } elseif ($user->role == 1){
@@ -90,9 +90,10 @@ class AdminHospitalController extends Controller
             $user->save();
 
             return $user;
-        } else {
-            return 404;
-        }
+
+            } else {
+                return 404;
+            }
     }
 
     public function bloods($id, $type)
@@ -102,17 +103,23 @@ class AdminHospitalController extends Controller
     }
 
 
-    public function addEmployee(Request $request)
+    public function addEmployee($id)
     {
-        $authUser = auth()->user();
-        if ($authUser->role == 1) {
-            $user = $this->user->findOrFail($request->id);
+        $user = $this->user::findOrFail($id);
+        if ($user->hospital_id == null) {
+            $authUser = auth()->user();
+        if ($authUser->role == 1 && $user != $authUser) {
+            $user = $this->user->findOrFail($id);
             $user->hospital_id = $authUser->hospital_id;
-            $user->save;
+            $user->save();
             return $user;
         } else {
             return 404;
         }
+        } else {
+            return response()->json(['message' => 'can\'t add this user']);
+        }
+
     }
 
     public function deleteEmployee($id)
@@ -122,10 +129,22 @@ class AdminHospitalController extends Controller
         if ($authUser->role == 1 && $authUser->hospital_id == $user->hospital_id && $user != $authUser) {
             $user->hospital_id = Null;
             $user->role = 0;
-            $user->save;
+            $user->save();
             return $user;
         } else {
             return 404;
         }
     }
+
+    //search for emp by name
+    public function searchByName(Request $request)
+    {
+        $authUser = Auth::user();
+        $hospitalId = $authUser->hospital_id;
+        $user = $this->user::where('name', $request->name)->where('hospital_id', $hospitalId)->get();
+        return response()->json($user);
+    }
+
+    // feed 
+
 }

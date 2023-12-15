@@ -24,8 +24,10 @@ return new class extends Migration
             $table->boolean('gender')->default(true); // true main male .. false main female
             $table->string('location');
             $table->dateTime('donation_date')->nullable();
+            $table->boolean('donatable')->default(0); // 0 -> disable to donate  -- 1 -> able to donate
             $table->integer('role')->default(0);  // 0 -> default user | 1 -> admin | 2 -> super admin.
             $table->integer('points')->default(0);
+            $table->boolean('block')->default(false);
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();

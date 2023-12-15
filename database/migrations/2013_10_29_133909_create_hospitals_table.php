@@ -21,6 +21,8 @@ return new class extends Migration
             $table->text('address');
             $table->double('latitude')->nullable();
             $table->double('longitude')->nullable();
+            $table->boolean('approved')->default(false);
+            $table->boolean('block')->default(false);
 
             $table->timestamps();
         });

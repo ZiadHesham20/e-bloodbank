@@ -21,8 +21,19 @@ class Hospital extends Model
         return $this->belongsToMany(Blood::class, 'hospital_bloods');
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
     public function usersRequest()
     {
         return $this->belongsToMany(User::class, 'hospital_users');
+    }
+
+    public function isApproved()
+    {
+        // check approved
+        return $this->approved;
     }
 }

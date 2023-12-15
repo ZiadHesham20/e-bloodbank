@@ -33,20 +33,20 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
     {
-        if ($exception instanceof ModelNotFoundException) {
-            return  Response::json([
-                'error' => [
-                    'message' => 'Not Found!'
-                ]
-            ], 404);
-        }
-        if ($exception instanceof MethodNotAllowedHttpException) {
-            return  Response::json([
-                'error' => [
-                    'message' => 'Not Supported for this route!'
-                ]
-            ], 403);
-        }
+        // if ($exception instanceof ModelNotFoundException) {
+        //     return  Response::json([
+        //         'error' => [
+        //             'message' => 'Not Found!'
+        //         ]
+        //     ], 404);
+        // }
+        // if ($exception instanceof MethodNotAllowedHttpException) {
+        //     return  Response::json([
+        //         'error' => [
+        //             'message' => 'Not Supported for this route!'
+        //         ]
+        //     ], 403);
+        // }
         // else {
         //     return  Response::json([
         //         'error' => [
