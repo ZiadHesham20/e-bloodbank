@@ -22,6 +22,8 @@ class UsersController extends Controller
     public function __construct(User $user)
     {
         $this->user = $user;
+        $this->middleware('Admin')->except('show', 'index', 'update', 'destroy');
+        $this->middleware('SuperAdmin')->only('destroy');
     }
     /**
      * Display a listing of the resource.
@@ -29,7 +31,7 @@ class UsersController extends Controller
     public function index()
     {
 
-        return $this->user::paginate(20);
+        return $this->user::paginate(12);
     }
 
     /**

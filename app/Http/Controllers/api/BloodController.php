@@ -12,6 +12,7 @@ class BloodController extends Controller
     public function __construct(Blood $blood)
     {
         $this->blood = $blood;
+        $this->middleware(['Admin', 'auth:sanctum']);
     }
     /**
      * Display a listing of the resource.

@@ -12,7 +12,7 @@ class ReviewController extends Controller
 
     public function __construct(Review $review)
     {
-        $this->middleware('auth.basic.once');
+        $this->middleware('auth:sanctum');
         $this->review = $review;
     }
     /**
@@ -20,7 +20,7 @@ class ReviewController extends Controller
      */
     public function index()
     {
-        //
+        return $this->review::paginate(12);
     }
 
     /**

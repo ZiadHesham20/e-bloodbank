@@ -99,14 +99,29 @@ class User extends Authenticatable
     {
         return $this->role == 1;
     }
-    public function requestAvailability(){
-        $user = HospitalUser::where("user_id",'=',$this->id)->get("done");
-       if($user[0]->done == 1){
-        return 1;
-    }else{
-        return 0;
+
+    public function isAdmin()
+    {
+        return $this->role == 2;
+    }
+    public function isSuperAdmin()
+    {
+        return $this->role > 2;
     }
 
-}
+    public function isEmployee()
+    {
+        return $this->hospital_id != null;
+    }
+
+    public function requestAvailability()
+    {
+        $user = HospitalUser::where("user_id",'=',$this->id)->get("done");
+        if($user[0]->done == 1){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
 
 }

@@ -15,15 +15,16 @@ class HospitalUserController extends Controller
 
     public function __construct(HospitalUser $request)
     {
-        $this->middleware('auth.basic.once')->only('requestBloods', 'showDonorUser', 'MyHospitalRequests', 'MyHospitalUsersRequests', 'myUserRequests', 'requestDonate', 'hospitalPayment', 'requestUserDone', 'hospitalFinishRequest');
-        $this->middleware('HospitalAdmin')->only('requestBloods', 'showDonorUser');
+        $this->middleware('auth:sanctum')->only('requestBloods', 'showDonorUser', 'MyHospitalRequests', 'MyHospitalUsersRequests', 'myUserRequests', 'requestDonate', 'hospitalPayment', 'requestUserDone', 'hospitalFinishRequest');
+        $this->middleware('HospitalAdmin')->only('requestBloods', 'showDonorUser', 'hospitalFinishRequest');
+        $this->middleware('Employee')->only('requestBloods', 'showDonorUser', 'hospitalFinishRequest', 'MyHospitalRequests', 'MyHospitalUsersRequests', 'requestUserDone', 'hospitalPayment', 'hospitalFinishRequest');
         $this->request = $request;
     }
 
     // ziad
     public function index()
     {
-        return $this->request::all();
+        return $this->request::paginate(12);
     }
 
     public function requestBloods($id)
@@ -72,7 +73,7 @@ class HospitalUserController extends Controller
             return response()->json(['message' => 'you can not donate now'], 200); // User cannot donate blood
         }
     }
-
+    // ??
     public function showDonorUser()
     {
         $user = Auth::user();
@@ -91,14 +92,14 @@ class HospitalUserController extends Controller
             return 404;
         }
     }
-    //admin
+    //
     public function showUsersRequest()
     {
         $usersRequset = $this->request->where('type', 0)->get();
         return $usersRequset;
     }
 
-    // admin
+    //
     public function showHospitalsRequest()
     {
         $hospitalsRequset = $this->request->where('type', 1)->get();
@@ -112,7 +113,7 @@ class HospitalUserController extends Controller
         return $request;
     }
 
-    //hospital employee
+    //hospital employee  policy
     public function MyHospitalRequests()
     {
         $hospitalId = auth()->user()->hospital_id;
@@ -120,7 +121,7 @@ class HospitalUserController extends Controller
         return $request;
     }
 
-    //hospital employee
+    //hospital employee policy
     public function MyHospitalUsersRequests()
     {
         $hospitalId = auth()->user()->hospital_id;
@@ -135,14 +136,18 @@ class HospitalUserController extends Controller
         $request = $this->request->where('type', 0)->where('user_id', $userId)->get();
         return $request;
     }
-
+    // policy   ---- emp in hosp
     public function destroy($id)
     {
-        $this->request::findOrFail($id)->delete();
-        return response()->noContent();
+        $user = Auth::user();
+        $req = $this->request::findOrFail($id);
+        if($req->user_id = $user->id || $user->role > 1) {
+            $req->delete();
+            return response()->json(['message' => 'deleted'], 200);
+        }
     }
 
-    // make user request done = 1 after donate
+    // make user request done = 1 after donate  ---- emp in hosp
     public function requestUserDone($id)
     {
         $hospitalEmp = auth()->user();
@@ -165,7 +170,7 @@ class HospitalUserController extends Controller
         }
     }
 
-    // show payments
+    // show payments   ---- emp in hosp
     public function hospitalPayment()
     {
         $hospitalId = auth()->user()->hospital_id;

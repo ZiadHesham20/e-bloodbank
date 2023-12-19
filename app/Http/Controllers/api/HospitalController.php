@@ -15,8 +15,9 @@ class HospitalController extends Controller
 
     public function __construct(Hospital $hospital)
     {
-        $this->middleware('auth.basic.once')->except('index', 'show');
-        $this->middleware('HospitalAdmin')->only('update');
+        $this->middleware('auth:sanctum')->except('index', 'show');
+        $this->middleware('HospitalAdmin')->only('update', 'destroy');
+        $this->middleware('SuperAdmin')->only('update', 'destroy');
         $this->hospital = $hospital;
     }
     /**
@@ -25,7 +26,7 @@ class HospitalController extends Controller
     public function index()
     {
         // where approved
-        $hospitals = $this->hospital::paginate(10);
+        $hospitals = $this->hospital::paginate(12);
         return $hospitals;
     }
 

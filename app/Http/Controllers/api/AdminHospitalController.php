@@ -16,7 +16,9 @@ class AdminHospitalController extends Controller
 
     public function __construct(User $user)
     {
-        $this->middleware(['auth.basic.once', 'HospitalAdmin']);
+        $this->middleware('auth:sanctum');
+        $this->middleware('HospitalAdmin')->except('searchByName');
+        $this->middleware('Employee')->only('searchByName');
         $this->user = $user;
     }
     /**
@@ -141,10 +143,15 @@ class AdminHospitalController extends Controller
     {
         $authUser = Auth::user();
         $hospitalId = $authUser->hospital_id;
-        $user = $this->user::where('name', $request->name)->where('hospital_id', $hospitalId)->get();
-        return response()->json($user);
+        if($authUser && $hospitalId) {
+            $user = $this->user::where('name', 'like', "%$request->name%")->where('hospital_id', $hospitalId)->get();
+            return response()->json($user);
+        }
+        else {
+            return response()->json(['message' => "error"], 404);
+        }
     }
 
-    // feed 
+    // feed
 
 }

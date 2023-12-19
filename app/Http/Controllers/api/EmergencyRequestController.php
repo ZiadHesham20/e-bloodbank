@@ -13,7 +13,7 @@ class EmergencyRequestController extends Controller
 
     public function __construct(EmergencyRequest $emergencyRequest)
     {
-        $this->middleware('auth.basic.once')->except('index', 'show');
+        $this->middleware('auth:sanctum')->except('index', 'show');
         $this->emergencyRequest = $emergencyRequest;
     }
     /**

@@ -15,7 +15,8 @@ class HospitalBloodController extends Controller
 
     public function __construct(HospitalBlood $hospitalBlood)
     {
-        $this->middleware('auth.basic.once');
+        $this->middleware('auth:sanctum');
+        $this->middleware('Admin')->only('addBlood');
         $this->hospitalBlood = $hospitalBlood;
     }
     public function addBlood(Request $request) {

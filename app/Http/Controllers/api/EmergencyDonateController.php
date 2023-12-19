@@ -15,7 +15,7 @@ class EmergencyDonateController extends Controller
     public function __construct(EmergencyDonate $emergencyDonate)
     {
         $this->emergencyDonate = $emergencyDonate;
-        $this->middleware('auth.basic.once');
+        $this->middleware('auth:sanctum');
     }
     /**
      * Display a listing of the resource.

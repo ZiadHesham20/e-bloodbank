@@ -1,16 +1,15 @@
 <?php
 
 use App\Http\Controllers\api\AdminHospitalController;
-use App\Http\Controllers\API\BasicLoginController;
-use App\Http\Controllers\api\HospitalBloodController;
-use App\Http\Controllers\api\UsersController;
-use App\Http\Controllers\api\HospitalController;
-use App\Http\Controllers\api\HospitalUserController;
 use App\Http\Controllers\api\DiseaseController;
 use App\Http\Controllers\api\EmergencyDonateController;
 use App\Http\Controllers\api\EmergencyRequestController;
+use App\Http\Controllers\api\HospitalBloodController;
+use App\Http\Controllers\api\HospitalController;
+use App\Http\Controllers\api\HospitalUserController;
 use App\Http\Controllers\api\MedicineController;
 use App\Http\Controllers\api\ReviewController;
+use App\Http\Controllers\api\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,14 +19,15 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
+
 
 Route::apiResource('/users', UsersController::class);
 Route::patch('admin/hospital/approve/{id}', [UsersController::class, 'Approved']);
@@ -35,8 +35,6 @@ Route::patch('admin/users/block/{id}', [UsersController::class, 'BlockUser']);
 Route::patch('admin/users/{id}/changeToAdmin', [UsersController::class, 'changeRoleToAdmin']);
 Route::patch('admin/users/{id}/changeToSuperAdmin', [UsersController::class, 'changeRoleToSuperAdmin']);
 Route::patch('admin/users/{id}/changeToDefaultUser', [UsersController::class, 'changeRoleToDefualtUser']);
-
-Route::apiResource('/hospitals', HospitalController::class);
 
 Route::apiResource('/hospitals/admin', AdminHospitalController::class);
 Route::patch('/hospital/admin/{id}/changeRole', [AdminHospitalController::class, 'changeRole']);
@@ -67,11 +65,14 @@ Route::patch('/hospital/payBlood/{id}', [HospitalBloodController::class, 'payBlo
 
 Route::apiResource('/diseases', DiseaseController::class);
 Route::apiResource('/medicines', MedicineController::class);
+
+Route::apiResource('/hospitals', HospitalController::class);
 Route::get('/hospital/{name}',[HospitalController::class,'searchByName']);
 Route::get('/hospital/address/{address}',[HospitalController::class,'searchByaddress']);
 Route::get('/hospital/default/address',[HospitalController::class,'getdafaulthospitals']);
 
 Route::post('/reviews', [ReviewController::class, 'store']);
+Route::get('/reviews', [ReviewController::class, 'index']);
 
 Route::apiResource('/emergency-requests', EmergencyRequestController::class);
 Route::get('/emergency-request/history', [EmergencyRequestController::class, 'myRequest']);
@@ -83,4 +84,5 @@ Route::delete('/emergency-donates/{id}', [EmergencyDonateController::class, 'des
 Route::post('/emergency-donates/response/{id}', [EmergencyDonateController::class, 'emergencyDonate']);
 Route::get('/emergency-donate/history', [EmergencyDonateController::class, 'history']);
 
+require __DIR__.'/auth.php';
 
