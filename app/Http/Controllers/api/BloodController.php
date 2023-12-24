@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BloodResource;
 use App\Models\Blood;
 use Illuminate\Http\Request;
 
@@ -19,41 +20,9 @@ class BloodController extends Controller
      */
     public function index()
     {
-        $bloods = $this->blood::all();
+        $bloods = BloodResource::collection($this->blood::all());
+        return $bloods->response()->setStatusCode(200);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Blood $blood)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Blood $blood)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      */
@@ -61,14 +30,10 @@ class BloodController extends Controller
     {
         $blood = $this->blood::findOrFail($id);
         $blood->update($request->price);
-        return $blood;
-    }
+        // Create a new UserResource instance
+        $bloodResource = new BloodResource($blood);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Blood $blood)
-    {
-        //
+        // Return the transformed data as a JSON response with a 201 status code
+        return $bloodResource->response()->setStatusCode(200);
     }
 }

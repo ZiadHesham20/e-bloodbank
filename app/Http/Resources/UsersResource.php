@@ -12,20 +12,20 @@ class UsersResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray(Request $request)
     {
-       return [
-        'id'=> $this->id,
-        'name'=> $this->name,
-        'email'=> $this->email,
-        'password'=>$this->password,
-        'age'=>$this->age,
-        'phone'=>$this->phone,
-        'gender'=>$this->gender,
-        'blood_type'=>$this->blood_type,
-        'location'=>$this->location,
-        'date_and_time'=>$this->date_and_time,
-        'request_id'=>$this->request_id
-       ];
+    //    return [
+    //     'id'=> $this->id,
+    //     'name'=> $this->name,
+    //     'email'=> $this->email,
+    //     'password'=>$this->password,
+    //     'age'=>$this->age,
+    //     'phone'=>$this->phone,
+    //     'gender'=>$this->gender,
+    //     'blood_type'=>$this->blood_type,
+    //     'location'=>$this->location,
+    //     'date_and_time'=>$this->date_and_time,
+    //     'request_id'=>$this->request_id
+    //    ];
     }
 }

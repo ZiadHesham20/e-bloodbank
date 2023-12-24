@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MedicineResource;
 use App\Models\Medicine;
 use Illuminate\Http\Request;
 
@@ -19,8 +20,8 @@ class MedicineController extends Controller
      */
     public function index()
     {
-        $medicine = $this->medicine::all();
-        return $medicine;
+        $medicine = MedicineResource::collection($this->medicine::all());
+        return $medicine->response()->setStatusCode(200);
     }
 
     /**
@@ -38,7 +39,10 @@ class MedicineController extends Controller
     {
         $medicine = new $this->medicine;
         $medicine = $this->medicine::create($request->all());
-        return $medicine;
+        $medicineResource = new MedicineResource($medicine);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $medicineResource->response()->setStatusCode(201);
     }
 
     /**
@@ -47,7 +51,10 @@ class MedicineController extends Controller
     public function show($id)
     {
         $medicine = $this->medicine::findOrFail($id);
-        return $medicine;
+        $medicineResource = new MedicineResource($medicine);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $medicineResource->response()->setStatusCode(200);
     }
 
     /**
@@ -65,7 +72,10 @@ class MedicineController extends Controller
     {
         $medicine = $this->medicine::findOrFail($id);
         $medicine->update($request->all());
-        return $medicine;
+        $medicineResource = new MedicineResource($medicine);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $medicineResource->response()->setStatusCode(200);
     }
 
     /**
@@ -74,6 +84,6 @@ class MedicineController extends Controller
     public function destroy($id)
     {
         $this->medicine::findOrFail($id)->delete();
-        return 204;
+        return response()->json(['message' => 'deleted'], 200);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DiseaseResource;
 use App\Models\Disease;
 use Illuminate\Http\Request;
 
@@ -19,8 +20,8 @@ class DiseaseController extends Controller
      */
     public function index()
     {
-        $disease = $this->disease::all();
-        return $disease;
+        $disease = DiseaseResource::collection($this->disease::all());
+        return $disease->response()->setStatusCode(200);
     }
 
     /**
@@ -38,7 +39,11 @@ class DiseaseController extends Controller
     {
         $disease = new $this->disease;
         $disease = $this->disease::create($request->all());
-        return $disease;
+        // Create a new UserResource instance
+        $diseaseResource = new DiseaseResource($disease);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $diseaseResource->response()->setStatusCode(201);
     }
 
     /**
@@ -47,7 +52,11 @@ class DiseaseController extends Controller
     public function show($id)
     {
         $disease = $this->disease::findOrFail($id);
-        return $disease;
+        // Create a new UserResource instance
+        $diseaseResource = new DiseaseResource($disease);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $diseaseResource->response()->setStatusCode(200);
     }
 
     /**
@@ -65,7 +74,11 @@ class DiseaseController extends Controller
     {
         $disease = $this->disease::findOrFail($id);
         $disease->update($request->all());
-        return $disease;
+        // Create a new UserResource instance
+        $diseaseResource = new DiseaseResource($disease);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $diseaseResource->response()->setStatusCode(200);
     }
 
     /**
@@ -74,6 +87,6 @@ class DiseaseController extends Controller
     public function destroy($id)
     {
         $this->disease::findOrFail($id)->delete();
-        return 204;
+        return response()->json(['message' => 'deleted'], 200);
     }
 }

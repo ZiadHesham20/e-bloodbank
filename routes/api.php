@@ -30,11 +30,11 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 
 Route::apiResource('/users', UsersController::class);
-Route::patch('admin/hospital/approve/{id}', [UsersController::class, 'Approved']);
 Route::patch('admin/users/block/{id}', [UsersController::class, 'BlockUser']);
 Route::patch('admin/users/{id}/changeToAdmin', [UsersController::class, 'changeRoleToAdmin']);
 Route::patch('admin/users/{id}/changeToSuperAdmin', [UsersController::class, 'changeRoleToSuperAdmin']);
 Route::patch('admin/users/{id}/changeToDefaultUser', [UsersController::class, 'changeRoleToDefualtUser']);
+Route::post('users/update-profile', [UsersController::class, 'updateProfile']);
 
 Route::apiResource('/hospitals/admin', AdminHospitalController::class);
 Route::patch('/hospital/admin/{id}/changeRole', [AdminHospitalController::class, 'changeRole']);
@@ -44,9 +44,9 @@ Route::patch('/hospital/admin/addEmployee/{id}', [AdminHospitalController::class
 Route::patch('/hospital/admin/deleteEmployee/{id}', [AdminHospitalController::class, 'deleteEmployee']);
 Route::get('/hospital/employes/search', [AdminHospitalController::class, 'searchByName']);
 
-Route::post('/hospital/request/{id}', [HospitalUserController::class, 'requestBloods']);
+Route::post('/hospital/request', [HospitalUserController::class, 'requestBloods']);
 Route::get('/hospital/donor', [HospitalUserController::class, 'showDonorUser']);
-Route::get('/users/requests/all', [HospitalUserController::class, 'showUsersRequest']);
+Route::get('/user/requests/all', [HospitalUserController::class, 'showUsersRequest']);
 Route::get('/requests/{id}', [HospitalUserController::class, 'showRequest']);
 Route::get('/hospitals/requests/all', [HospitalUserController::class, 'showHospitalsRequest']);
 Route::get('/hospital/requests', [HospitalUserController::class, 'MyHospitalRequests']);
@@ -59,9 +59,17 @@ Route::patch('/hospital/request/done/{id}', [HospitalUserController::class, 'req
 Route::get('/hospital/payments', [HospitalUserController::class, 'hospitalPayment']);
 Route::patch('/hospital/request/{id}/finished', [HospitalUserController::class, 'hospitalFinishRequest']);
 Route::get('/request/search', [HospitalUserController::class, 'search']);
+Route::post('/user/userRequestBloods', [HospitalUserController::class, 'userRequestBloods']);
+Route::get('/user/showUserRequestBloods', [HospitalUserController::class, 'showUserRequestBloods']);
+Route::get('/user/showUserRequestBloodsInHospital', [HospitalUserController::class, 'showUserRequestBloodsInHospital']);
+Route::get('/user/myUserRequestBloods', [HospitalUserController::class, 'myUserRequestBloods']);
+Route::delete('/user/destroymyUserRequestBloods/{id}', [HospitalUserController::class, 'destroymyUserRequestBloods']);
+Route::patch('/user/UserRequestBloodsDone/{id}', [HospitalUserController::class, 'UserRequestBloodsDone']);
 
 Route::post('/hospital/addBlood', [HospitalBloodController::class, 'addBlood']);
 Route::patch('/hospital/payBlood/{id}', [HospitalBloodController::class, 'payBlood']);
+Route::delete('/hospital/deleteExpiredBloods/{id}', [HospitalBloodController::class, 'deleteExpiredBloods']);
+Route::get('/hospital/bloods', [HospitalBloodController::class, 'index']);
 
 Route::apiResource('/diseases', DiseaseController::class);
 Route::apiResource('/medicines', MedicineController::class);
@@ -70,6 +78,9 @@ Route::apiResource('/hospitals', HospitalController::class);
 Route::get('/hospital/{name}',[HospitalController::class,'searchByName']);
 Route::get('/hospital/address/{address}',[HospitalController::class,'searchByaddress']);
 Route::get('/hospital/default/address',[HospitalController::class,'getdafaulthospitals']);
+Route::patch('/hospital/BlockHospital/{id}',[HospitalController::class,'BlockHospital']);
+Route::patch('admin/hospital/approve/{id}', [HospitalController::class, 'Approved']);
+
 
 Route::post('/reviews', [ReviewController::class, 'store']);
 Route::get('/reviews', [ReviewController::class, 'index']);

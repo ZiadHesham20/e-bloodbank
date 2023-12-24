@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BloodResource;
+use App\Http\Resources\UserResource;
 use App\Models\Hospital;
 use App\Models\User;
 use Carbon\Carbon;
@@ -27,56 +29,8 @@ class AdminHospitalController extends Controller
     public function indexEmployee()
     {
         $adminHospitalId = auth()->user()->hospital_id;
-        return $this->user::where('hospital_id', $adminHospitalId)->get();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        // make role = 0 and hospital = null
-        //
+        $users = UserResource::collection($this->user::where('hospital_id', $adminHospitalId)->get());
+        return $users->response()->setStatusCode(200);
     }
 
     public function changeRole($id)
@@ -91,17 +45,25 @@ class AdminHospitalController extends Controller
             }
             $user->save();
 
-            return $user;
+            // Create a new UserResource instance
+            $userResource = new UserResource($user);
+
+            // Return the transformed data as a JSON response with a 201 status code
+            return $userResource->response()->setStatusCode(200);
 
             } else {
-                return 404;
+                return response()->json(['message' => 'error', 404]);
             }
     }
 
     public function bloods($id, $type)
     {
         $bloods = Hospital::findOrFail($id)->bloods()->where('type', $type)->orderBy('created_at', 'desc')->get();
-        return $bloods;
+        // Create a new UserResource instance
+        $bloodsResource = new BloodResource($bloods);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $bloodsResource->response()->setStatusCode(200);
     }
 
 
@@ -114,12 +76,17 @@ class AdminHospitalController extends Controller
             $user = $this->user->findOrFail($id);
             $user->hospital_id = $authUser->hospital_id;
             $user->save();
-            return $user;
+            // Create a new UserResource instance
+            $userResource = new UserResource($user);
+
+            // Return the transformed data as a JSON response with a 201 status code
+            return $userResource->response()->setStatusCode(200);
+
         } else {
-            return 404;
+            return response()->json(['message' => 'error']);
         }
         } else {
-            return response()->json(['message' => 'can\'t add this user']);
+            return response()->json(['message' => 'can\'t add this user'], 404);
         }
 
     }
@@ -132,7 +99,11 @@ class AdminHospitalController extends Controller
             $user->hospital_id = Null;
             $user->role = 0;
             $user->save();
-            return $user;
+            // Create a new UserResource instance
+            $userResource = new UserResource($user);
+
+            // Return the transformed data as a JSON response with a 201 status code
+            return $userResource->response()->setStatusCode(200);
         } else {
             return 404;
         }
@@ -145,13 +116,14 @@ class AdminHospitalController extends Controller
         $hospitalId = $authUser->hospital_id;
         if($authUser && $hospitalId) {
             $user = $this->user::where('name', 'like', "%$request->name%")->where('hospital_id', $hospitalId)->get();
-            return response()->json($user);
+            // Create a new UserResource instance
+            $userResource = new UserResource($user);
+
+            // Return the transformed data as a JSON response with a 201 status code
+            return $userResource->response()->setStatusCode(200);
         }
         else {
             return response()->json(['message' => "error"], 404);
         }
     }
-
-    // feed
-
 }

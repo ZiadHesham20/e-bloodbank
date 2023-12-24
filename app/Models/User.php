@@ -102,11 +102,11 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->role == 2;
+        return $this->role >= 2;
     }
     public function isSuperAdmin()
     {
-        return $this->role > 2;
+        return $this->role == 3;
     }
 
     public function isEmployee()

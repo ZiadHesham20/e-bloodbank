@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\HospitalResource;
 use App\Models\Hospital;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class HospitalController extends Controller
     {
         $this->middleware('auth:sanctum')->except('index', 'show');
         $this->middleware('HospitalAdmin')->only('update', 'destroy');
-        $this->middleware('SuperAdmin')->only('update', 'destroy');
+        $this->middleware('SuperAdmin')->only('update', 'destroy', 'Approved', 'BlockHospital');
         $this->hospital = $hospital;
     }
     /**
@@ -26,16 +27,8 @@ class HospitalController extends Controller
     public function index()
     {
         // where approved
-        $hospitals = $this->hospital::paginate(12);
-        return $hospitals;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $hospitals = HospitalResource::collection($this->hospital::paginate(12));
+        return $hospitals->response()->setStatusCode(200);
     }
 
     /**
@@ -72,7 +65,11 @@ class HospitalController extends Controller
         $user->hospital_id = $hospital->id;
         $user->save();
 
-        return $hospital;
+        // Create a new UserResource instance
+        $hospitalResource = new HospitalResource($hospital);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $hospitalResource->response()->setStatusCode(201);
     }
 
     /**
@@ -81,15 +78,11 @@ class HospitalController extends Controller
     public function show($id)
     {
         $hospital = $this->hospital::find($id);
-        return $hospital;
-    }
+        // Create a new UserResource instance
+        $hospitalResource = new HospitalResource($hospital);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Hospital $hospital)
-    {
-        //
+        // Return the transformed data as a JSON response with a 201 status code
+        return $hospitalResource->response()->setStatusCode(200);
     }
 
     /**
@@ -124,7 +117,11 @@ class HospitalController extends Controller
 
         $hospital->update($request->all());
 
-        return $hospital;
+        // Create a new UserResource instance
+        $hospitalResource = new HospitalResource($hospital);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $hospitalResource->response()->setStatusCode(200);
     }
 
     /**
@@ -133,26 +130,90 @@ class HospitalController extends Controller
     public function destroy($id)
     {
         $this->hospital::findOrFail($id)->delete();
-        return 204;
+        return response()->json(['message' => 'deleted'], 200);
     }
+
     // search by name
     public function searchByName($name)
     {
         $hospital = $this->hospital::where('name','LIKE',$name)->get();
-        return response()->json($hospital);
+        // Create a new UserResource instance
+        $hospitalResource = new HospitalResource($hospital);
+        // Return the transformed data as a JSON response with a 201 status code
+        return $hospitalResource->response()->setStatusCode(200);
     }
+
     // search by location
     public function searchByaddress($address)
     {
         $hospital = $this->hospital::where('address','LIKE',$address)->get();
-        return response()->json($hospital);
+        // Create a new UserResource instance
+        $hospitalResource = new HospitalResource($hospital);
+        // Return the transformed data as a JSON response with a 201 status code
+        return $hospitalResource->response()->setStatusCode(200);
     }
+
     // by default show hospitals in my locaton
     public function getdafaulthospitals()
     {
         $user = User::find(Auth::user()->id);
         $hospital = $this->hospital::where('address','LIKE',$user->location)->get();
-        return response()->json($hospital);
+        // Create a new UserResource instance
+        $hospitalResource = new HospitalResource($hospital);
+        // Return the transformed data as a JSON response with a 201 status code
+        return $hospitalResource->response()->setStatusCode(200);
     }
 
+    // approve or not to create hospital -- super admin
+    public function Approved($id)
+    {
+        $hospital = $this->hospital::findOrFail($id);
+        if ($hospital->approved == 0)
+        {
+            $hospital->approved = 1;
+            $hospital->save();
+            $hospitalResource = new HospitalResource($hospital);
+
+            // Return the transformed data as a JSON response with a 201 status code
+            return $hospitalResource->response()->setStatusCode(200);
+        }
+        elseif ($hospital->approved == 1) {
+            $hospital->approved = 0;
+            $hospital->save();
+            $hospitalResource = new HospitalResource($hospital);
+
+            // Return the transformed data as a JSON response with a 201 status code
+            return $hospitalResource->response()->setStatusCode(200);
+        }
+        else
+        {
+            return response('This action is unavailable', 409);
+        }
+    }
+
+    public function BlockHospital($id)
+    {
+        $hospital = $this->hospital::findOrFail($id);
+        if ($hospital->block == 0)
+        {
+            $hospital->block = 1;
+            $hospital->save();
+            $hospitalResource = new HospitalResource($hospital);
+
+            // Return the transformed data as a JSON response with a 201 status code
+            return $hospitalResource->response()->setStatusCode(200);
+        }
+        elseif ($hospital->block == 1) {
+            $hospital->block = 0;
+            $hospital->save();
+            $hospitalResource = new HospitalResource($hospital);
+
+            // Return the transformed data as a JSON response with a 201 status code
+            return $hospitalResource->response()->setStatusCode(200);
+        }
+        else
+        {
+            return response('This action is unavailable', 409);
+        }
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\HospitalBloodResource;
 use App\Models\Hospital;
 use App\Models\HospitalBlood;
 use App\Models\HospitalUser;
@@ -45,22 +46,42 @@ class HospitalBloodController extends Controller
             $stock->first()->delete();
             $Request->done = 1;
             $Request->update();
-            return 200;
+            return response()->json(['status' => 'success'], 200);
         }
         elseif ($Request->done == 1) {
-            return ['error' => 'This request has been processed'];
+            return response()->json(['error' => 'This request has been processed'], 200);
         }
         elseif ($stock->count() == 0) {
-            return ['error' => 'No more stock available in this hospital'];
+            return response()->json(['error' => 'No more stock available in this hospital'], 200);
         }
         elseif ($authUser->hospital_id != $RequestHospital) {
-            return ['error' => 'You are not authorized to process this request'];
+            return response()->json(['error' => 'You are not authorized to process this request'], 200);
         }
         else {
-            return 404;
+            return response()->json(['message' => 'error'], 404);
         }
     }
 
 
     // delete expire bloods
+    public function deleteExpiredBloods($id)
+    {
+        $user = Auth::user();
+        $blood = $this->hospitalBlood::findOrFail($id);
+        if ($user->hospital_id == $blood->hospital_id){
+            $blood->delete();
+            return response()->json(['message' => 'deleted'], 200);
+        }
+        else {
+            return response()->json(['message' => 'you not allow to do this!'], 404);
+        }
+    }
+
+    public function index()
+    {
+        $user = Auth::user();
+        $bloods = HospitalBloodResource::collection($this->hospitalBlood::where('hospital_id', $user->hospital_id)->get());
+        return $bloods->response()->setStatusCode(200);
+    }
+
 }

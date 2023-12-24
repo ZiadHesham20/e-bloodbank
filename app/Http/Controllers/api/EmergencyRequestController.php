@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\EmergencyRequestResource;
 use App\Models\EmergencyRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,8 +22,8 @@ class EmergencyRequestController extends Controller
      */
     public function index()
     {
-        $req = $this->emergencyRequest::paginate(12);
-        return response()->json($req, 200);
+        $req = EmergencyRequestResource::collection($this->emergencyRequest::paginate(12));
+        return $req->response()->setStatusCode(200);
     }
 
     /**
@@ -59,7 +60,11 @@ class EmergencyRequestController extends Controller
             'location' => $request->location,
         ]);
 
-        return response()->json($req, 201);
+        // Create a new UserResource instance
+        $reqResource = new EmergencyRequestResource($req);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $reqResource->response()->setStatusCode(201);
     }
 
     /**
@@ -68,15 +73,11 @@ class EmergencyRequestController extends Controller
     public function show($id)
     {
         $req = $this->emergencyRequest::findOrFail($id);
-        return response()->json($req, 200);
-    }
+        // Create a new UserResource instance
+        $reqResource = new EmergencyRequestResource($req);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(EmergencyRequest $emergencyRequest)
-    {
-        //
+        // Return the transformed data as a JSON response with a 201 status code
+        return $reqResource->response()->setStatusCode(200);
     }
 
     /**
@@ -104,7 +105,11 @@ class EmergencyRequestController extends Controller
             'location' => $request->location,
         ]);
 
-        return response()->json($req, 200);
+        // Create a new UserResource instance
+        $reqResource = new EmergencyRequestResource($req);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $reqResource->response()->setStatusCode(200);
     }
 
     /**
@@ -128,10 +133,14 @@ class EmergencyRequestController extends Controller
             }
             $req->save();
 
-            return $req;
+            // Create a new UserResource instance
+            $reqResource = new EmergencyRequestResource($req);
 
-            } else {
-                return 404;
+            // Return the transformed data as a JSON response with a 201 status code
+            return $reqResource->response()->setStatusCode(200);
+            }
+            else {
+                return response()->json(['message' => 'error'], 404);
             }
     }
 
@@ -139,6 +148,10 @@ class EmergencyRequestController extends Controller
     {
         $user = Auth::user();
         $myDonate = $this->emergencyRequest::where('user_id', $user->id)->get();
-        return response()->json($myDonate, 200);
+        // Create a new UserResource instance
+        $myDonateResource = new EmergencyRequestResource($myDonate);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $myDonateResource->response()->setStatusCode(200);
     }
 }

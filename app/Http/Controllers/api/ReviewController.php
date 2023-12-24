@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ReviewResource;
 use App\Models\Review;
 use Illuminate\Http\Request;
 
@@ -20,15 +21,8 @@ class ReviewController extends Controller
      */
     public function index()
     {
-        return $this->review::paginate(12);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $review = ReviewResource::collection($this->review::paginate(12));
+        return $review->response()->setStatusCode(200);
     }
 
     /**
@@ -42,38 +36,9 @@ class ReviewController extends Controller
         }
         $review = $this->review::create($request->all()+ ['user_id' => auth()->id()]);
         // return response()->json(['review' => $review], 201);
-        return $review;
-    }
+        $reviewResource = new ReviewResource($review);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Review $review)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Review $review)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Review $review)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Review $review)
-    {
-        //
+        // Return the transformed data as a JSON response with a 201 status code
+        return $reviewResource->response()->setStatusCode(201);
     }
 }

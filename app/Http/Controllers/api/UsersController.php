@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Http\Requests\StoreUsersRequest;
 use App\Http\Requests\UpdateUsersRequest;
+use App\Http\Resources\UserResource;
 use App\Http\Resources\UsersResource;
 use App\Models\EmergencyDonate;
 use App\Models\EmergencyRequest;
@@ -22,6 +23,7 @@ class UsersController extends Controller
     public function __construct(User $user)
     {
         $this->user = $user;
+        $this->middleware('auth:sanctum');
         $this->middleware('Admin')->except('show', 'index', 'update', 'destroy');
         $this->middleware('SuperAdmin')->only('destroy');
     }
@@ -31,7 +33,8 @@ class UsersController extends Controller
     public function index()
     {
 
-        return $this->user::paginate(12);
+        $users = UserResource::collection($this->user::paginate(12));
+        return $users->response()->setStatusCode(200);
     }
 
     /**
@@ -53,8 +56,10 @@ class UsersController extends Controller
             'location' => $request->location,
         ]);
 
-        // return UsersResource::make($user);
-        return $user;
+        $usersResource = new UserResource($user);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $usersResource->response()->setStatusCode(201);
     }
 
     /**
@@ -63,7 +68,10 @@ class UsersController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        return response()->json($user);
+        $usersResource = new UserResource($user);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $usersResource->response()->setStatusCode(200);
     }
 
 
@@ -75,7 +83,10 @@ class UsersController extends Controller
     {
         $user->update($request->all());
 
-        return response()->json($request);
+        $usersResource = new UserResource($user);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $usersResource->response()->setStatusCode(200);
     }
 
     /**
@@ -84,30 +95,8 @@ class UsersController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return response()->noContent();
+        return response()->json(['message' => 'deleted'], 200);
     }
-
-    // approve or not to create hospital -- super admin
-    public function Approved($id)
-    {
-        $hospital = Hospital::findOrFail($id);
-        if ($hospital->approved == 0)
-        {
-            $hospital->approved = 1;
-            $hospital->save();
-            return response()->json($hospital, 200);
-        }
-        elseif ($hospital->approved == 1) {
-            $hospital->approved = 0;
-            $hospital->save();
-            return response()->json($hospital, 200);
-        }
-        else
-        {
-            return response('This action is unavailable', 409);
-        }
-    }
-
 
     // block user - hospital
     public function BlockUser($id)
@@ -117,12 +106,18 @@ class UsersController extends Controller
         {
             $user->block = 1;
             $user->save();
-            return response()->json($user, 200);
+            $usersResource = new UserResource($user);
+
+            // Return the transformed data as a JSON response with a 201 status code
+            return $usersResource->response()->setStatusCode(200);
         }
         elseif ($user->block == 1) {
             $user->block = 0;
             $user->save();
-            return response()->json($user, 200);
+            $usersResource = new UserResource($user);
+
+            // Return the transformed data as a JSON response with a 201 status code
+            return $usersResource->response()->setStatusCode(200);
         }
         else
         {
@@ -143,7 +138,10 @@ class UsersController extends Controller
         // // Return the transformed data as a JSON response with a 201 status code
         // return $userResource->response()->setStatusCode(200);
 
-        return response()->json($user, 200);
+        $usersResource = new UserResource($user);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $usersResource->response()->setStatusCode(200);
     }
 
     public function changeRoleToSuperAdmin($id)
@@ -157,7 +155,10 @@ class UsersController extends Controller
 
         // // Return the transformed data as a JSON response with a 201 status code
         // return $userResource->response()->setStatusCode(200);
-        return response()->json($user, 200);
+        $usersResource = new UserResource($user);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $usersResource->response()->setStatusCode(200);
     }
 
     // function make user role = 0
@@ -166,16 +167,26 @@ class UsersController extends Controller
         $user = $this->user::findOrFail($id);
         $user->role = 0;
         $user->save();
-
-        // // Create a new UserResource instance
-        // $userResource = new UserResource($user);
-
-        // // Return the transformed data as a JSON response with a 201 status code
-        // return $userResource->response()->setStatusCode(200);
-        return response()->json($user, 200);
+        $usersResource = new UserResource($user);
+        // Return the transformed data as a JSON response with a 201 status code
+        return $usersResource->response()->setStatusCode(200);
     }
 
-    // emergency donor with cash
-    // the user how need blood can send request to emergencies donor and send what blood he need and dateTime and location
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'profile_photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // image|mimes:jpeg,png,jpg,gif|max:2048
+        ]);
+
+        $user = Auth::user();
+
+        if ($request->hasFile('profile_photo')) {
+            $path = $request->file('profile_photo')->store('profile-photos', 'public');
+            $user->profile_photo_path = $path;
+            $user->save();
+        }
+
+        return response()->json(['success' => 'Profile photo updated successfully.'], 200);
+    }
 }
 

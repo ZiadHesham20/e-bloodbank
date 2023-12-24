@@ -11,6 +11,16 @@ class HospitalUser extends Model
 
     public function blood()
     {
-        $this->hasOne(Blood::class);
+        return $this->belongsTo(Blood::class);
+    }
+
+    public function hospital()
+    {
+        return $this->belongsTo(Hospital::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

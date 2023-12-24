@@ -16,7 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('hospital_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('blood_id');
-            $table->integer('type'); // if type = 0 -> user request to donate blood -- if type = 1 -> hospital need blood -- if 4 => user need to pay blood
+            $table->integer('type'); // if type = 0 -> user request to donate blood -- if type = 1 -> hospital need blood -- if 2 => user need to pay blood
+            $table->integer('count')->default(1);
             $table->boolean('done')->default(false);
             $table->timestamps();
 
