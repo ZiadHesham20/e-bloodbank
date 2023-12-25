@@ -18,6 +18,7 @@ class HospitalBloodResource extends JsonResource
             'id' => $this->id,
             'hospital_id' => $this->hospital_id,
             'blood_id' => $this->blood_id,
+            'created_at' => $this->created_at->diffForHumans(),
         ];
     }
 }

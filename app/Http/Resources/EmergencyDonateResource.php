@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\EmergencyRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,7 +16,8 @@ class EmergencyDonateResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'emergency' => new EmergencyRequest($this->emergency_id),
+            // 'emergency' => new EmergencyRequestResource($this->emergency),
+            'emergency' => $this->emergency_id,
             'user' => new UserResource($this->user),
         ];
     }

@@ -15,4 +15,9 @@ class EmergencyDonate extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function emergency()
+    {
+        return $this->belongsTo(EmergencyRequest::class);
+    }
 }

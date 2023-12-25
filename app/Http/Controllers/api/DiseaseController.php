@@ -25,14 +25,6 @@ class DiseaseController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -57,14 +49,6 @@ class DiseaseController extends Controller
 
         // Return the transformed data as a JSON response with a 201 status code
         return $diseaseResource->response()->setStatusCode(200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Disease $disease)
-    {
-        //
     }
 
     /**

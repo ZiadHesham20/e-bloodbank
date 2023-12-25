@@ -27,14 +27,6 @@ class EmergencyRequestController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -149,7 +141,7 @@ class EmergencyRequestController extends Controller
         $user = Auth::user();
         $myDonate = $this->emergencyRequest::where('user_id', $user->id)->get();
         // Create a new UserResource instance
-        $myDonateResource = new EmergencyRequestResource($myDonate);
+        $myDonateResource = EmergencyRequestResource::collection($myDonate);
 
         // Return the transformed data as a JSON response with a 201 status code
         return $myDonateResource->response()->setStatusCode(200);

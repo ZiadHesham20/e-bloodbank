@@ -38,7 +38,6 @@ Route::post('users/update-profile', [UsersController::class, 'updateProfile']);
 
 Route::apiResource('/hospitals/admin', AdminHospitalController::class);
 Route::patch('/hospital/admin/{id}/changeRole', [AdminHospitalController::class, 'changeRole']);
-Route::get('/hospital/{id}/admin/bloods/{type}', [AdminHospitalController::class, 'bloods']);
 Route::get('/hospital/employee', [AdminHospitalController::class, 'indexEmployee']);
 Route::patch('/hospital/admin/addEmployee/{id}', [AdminHospitalController::class, 'addEmployee']);
 Route::patch('/hospital/admin/deleteEmployee/{id}', [AdminHospitalController::class, 'deleteEmployee']);
@@ -48,7 +47,7 @@ Route::post('/hospital/request', [HospitalUserController::class, 'requestBloods'
 Route::get('/hospital/donor', [HospitalUserController::class, 'showDonorUser']);
 Route::get('/user/requests/all', [HospitalUserController::class, 'showUsersRequest']);
 Route::get('/requests/{id}', [HospitalUserController::class, 'showRequest']);
-Route::get('/hospitals/requests/all', [HospitalUserController::class, 'showHospitalsRequest']);
+Route::get('/hospital/requests/all', [HospitalUserController::class, 'showHospitalsRequest']);
 Route::get('/hospital/requests', [HospitalUserController::class, 'MyHospitalRequests']);
 Route::get('/hospital/users/requests', [HospitalUserController::class, 'MyHospitalUsersRequests']);
 Route::get('/user/request', [HospitalUserController::class, 'myUserRequests']);
@@ -70,6 +69,7 @@ Route::post('/hospital/addBlood', [HospitalBloodController::class, 'addBlood']);
 Route::patch('/hospital/payBlood/{id}', [HospitalBloodController::class, 'payBlood']);
 Route::delete('/hospital/deleteExpiredBloods/{id}', [HospitalBloodController::class, 'deleteExpiredBloods']);
 Route::get('/hospital/bloods', [HospitalBloodController::class, 'index']);
+Route::get('/hospital/admin/bloods/{type}', [HospitalBloodController::class, 'bloods']);
 
 Route::apiResource('/diseases', DiseaseController::class);
 Route::apiResource('/medicines', MedicineController::class);

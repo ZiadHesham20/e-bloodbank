@@ -15,16 +15,18 @@ class EmergencyDonateController extends Controller
 
     public function __construct(EmergencyDonate $emergencyDonate)
     {
-        $this->emergencyDonate = $emergencyDonate;
         $this->middleware('auth:sanctum');
+        $this->emergencyDonate = $emergencyDonate;
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $req = EmergencyDonateResource::collection($this->emergencyDonate::paginate(12));
-        return $req->response()->setStatusCode(200);
+        $req = $this->emergencyDonate::paginate(12);
+        $reqResource = EmergencyDonateResource::collection($req);
+        return $reqResource->response()->setStatusCode(200);
+        // return $req;
     }
 
     /**
@@ -71,7 +73,7 @@ class EmergencyDonateController extends Controller
         $user = Auth::user();
         $myDonate = $this->emergencyDonate->where('user_id', $user->id)->get();
         // Create a new UserResource instance
-        $myDonateResource = new EmergencyDonateResource($myDonate);
+        $myDonateResource = EmergencyDonateResource::collection($myDonate);
 
         // Return the transformed data as a JSON response with a 201 status code
         return $myDonateResource->response()->setStatusCode(200);

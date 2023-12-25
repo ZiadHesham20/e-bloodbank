@@ -57,9 +57,15 @@ class HospitalUserController extends Controller
     //
     public function showHospitalsRequest()
     {
-        $hospitalsRequset = $this->request->where('type', 1)->get();
+        $hospitalRequest = $this->request->where('type', 1)->get();
+
+        if (!$hospitalRequest) {
+        // Handle the case where no hospital request is found
+        // You can return a response, throw an exception, etc.
+        return response()->json(['error' => 'Hospital request not found'], 404);
+    }
         // Create a new UserResource instance
-        $reqResource = new HospitalUserResource($hospitalsRequset);
+        $reqResource = HospitalUserResource::collection($hospitalRequest);
 
         // Return the transformed data as a JSON response with a 201 status code
         return $reqResource->response()->setStatusCode(200);
@@ -71,7 +77,7 @@ class HospitalUserController extends Controller
         $hospitalId = auth()->user()->hospital_id;
         $request = $this->request->where('type', 1)->where('hospital_id', $hospitalId)->get();
         // Create a new UserResource instance
-        $reqResource = new HospitalUserResource($request);
+        $reqResource = HospitalUserResource::collection($request);
 
         // Return the transformed data as a JSON response with a 201 status code
         return $reqResource->response()->setStatusCode(200);
@@ -137,7 +143,7 @@ class HospitalUserController extends Controller
             $userId = $request->user_id;
             $user = User::findOrFail($userId);
             // Create a new UserResource instance
-            $userResource = new HospitalUserResource($user);
+            $userResource = HospitalUserResource::collection($user);
 
             // Return the transformed data as a JSON response with a 201 status code
             return $userResource->response()->setStatusCode(200);
@@ -177,7 +183,7 @@ class HospitalUserController extends Controller
     {
         $hospitalId = auth()->user()->hospital_id;
         $request = $this->request->where('type', 0)->where('hospital_id', $hospitalId)->get();
-        $reqResource = new HospitalUserResource($request);
+        $reqResource = HospitalUserResource::collection($request);
 
         // Return the transformed data as a JSON response with a 201 status code
         return $reqResource->response()->setStatusCode(200);
@@ -188,7 +194,7 @@ class HospitalUserController extends Controller
     {
         $userId = auth()->user()->id;
         $request = $this->request->where('type', 0)->where('user_id', $userId)->get();
-        $reqResource = new HospitalUserResource($request);
+        $reqResource = HospitalUserResource::collection($request);
 
         // Return the transformed data as a JSON response with a 201 status code
         return $reqResource->response()->setStatusCode(200);
@@ -243,7 +249,7 @@ class HospitalUserController extends Controller
     public function search(Request $request)
     {
         $Request = $this->request::where('id', $request->term)->get();
-        $reqResource = new HospitalUserResource($Request);
+        $reqResource = HospitalUserResource::collection($Request);
 
         // Return the transformed data as a JSON response with a 201 status code
         return $reqResource->response()->setStatusCode(200);
@@ -277,7 +283,7 @@ class HospitalUserController extends Controller
     public function showUserRequestBloods()
     {
         $usersRequset = $this->request->where('type', 2)->get();
-        $reqResource = new HospitalUserResource($usersRequset);
+        $reqResource = HospitalUserResource::collection($usersRequset);
 
         // Return the transformed data as a JSON response with a 201 status code
         return $reqResource->response()->setStatusCode(200);
@@ -288,7 +294,7 @@ class HospitalUserController extends Controller
     {
         $hospitalId = Auth::user()->hospital_id;
         $usersRequset = $this->request->where('type', 2)->where('hospital_id', $hospitalId)->get();
-        $reqResource = new HospitalUserResource($usersRequset);
+        $reqResource = HospitalUserResource::collection($usersRequset);
 
         // Return the transformed data as a JSON response with a 201 status code
         return $reqResource->response()->setStatusCode(200);
@@ -300,7 +306,7 @@ class HospitalUserController extends Controller
     {
         $user = auth()->user();
         $request = $this->request->where('type', 2)->where('user_id', $user->id)->get();
-        $reqResource = new HospitalUserResource($request);
+        $reqResource = HospitalUserResource::collection($request);
 
         // Return the transformed data as a JSON response with a 201 status code
         return $reqResource->response()->setStatusCode(200);

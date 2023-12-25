@@ -56,17 +56,6 @@ class AdminHospitalController extends Controller
             }
     }
 
-    public function bloods($id, $type)
-    {
-        $bloods = Hospital::findOrFail($id)->bloods()->where('type', $type)->orderBy('created_at', 'desc')->get();
-        // Create a new UserResource instance
-        $bloodsResource = new BloodResource($bloods);
-
-        // Return the transformed data as a JSON response with a 201 status code
-        return $bloodsResource->response()->setStatusCode(200);
-    }
-
-
     public function addEmployee($id)
     {
         $user = $this->user::findOrFail($id);
@@ -117,7 +106,7 @@ class AdminHospitalController extends Controller
         if($authUser && $hospitalId) {
             $user = $this->user::where('name', 'like', "%$request->name%")->where('hospital_id', $hospitalId)->get();
             // Create a new UserResource instance
-            $userResource = new UserResource($user);
+            $userResource = UserResource::collection($user);
 
             // Return the transformed data as a JSON response with a 201 status code
             return $userResource->response()->setStatusCode(200);

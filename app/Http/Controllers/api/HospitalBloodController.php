@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BloodResource;
 use App\Http\Resources\HospitalBloodResource;
 use App\Models\Hospital;
 use App\Models\HospitalBlood;
@@ -82,6 +83,23 @@ class HospitalBloodController extends Controller
         $user = Auth::user();
         $bloods = HospitalBloodResource::collection($this->hospitalBlood::where('hospital_id', $user->hospital_id)->get());
         return $bloods->response()->setStatusCode(200);
+    }
+
+    public function bloods($id)
+    {
+        // $bloods = Hospital::findOrFail($id)->bloods()->where('type', $type)->orderBy('created_at', 'desc')->get();
+        // // Create a new UserResource instance
+        // $bloodsResource = BloodResource::collection($bloods);
+
+        // // Return the transformed data as a JSON response with a 201 status code
+        // return $bloodsResource->response()->setStatusCode(200);
+
+        $authUser = Auth::user();
+        $bloods = $this->hospitalBlood::where('hospital_id', $authUser->hospital_id)->where('blood_id', $id)->get();
+        $bloodsResource = HospitalBloodResource::collection($bloods);
+
+        // Return the transformed data as a JSON response with a 201 status code
+        return $bloodsResource->response()->setStatusCode(200);
     }
 
 }

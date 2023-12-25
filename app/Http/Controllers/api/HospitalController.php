@@ -27,7 +27,7 @@ class HospitalController extends Controller
     public function index()
     {
         // where approved
-        $hospitals = HospitalResource::collection($this->hospital::paginate(12));
+        $hospitals = HospitalResource::collection($this->hospital::where('approved', 1)->where('block', 0)->paginate(12));
         return $hospitals->response()->setStatusCode(200);
     }
 
@@ -78,11 +78,16 @@ class HospitalController extends Controller
     public function show($id)
     {
         $hospital = $this->hospital::find($id);
-        // Create a new UserResource instance
-        $hospitalResource = new HospitalResource($hospital);
+        if ($hospital->approved == 1 && $hospital->block ==0) {
+            // Create a new UserResource instance
+            $hospitalResource = new HospitalResource($hospital);
 
-        // Return the transformed data as a JSON response with a 201 status code
-        return $hospitalResource->response()->setStatusCode(200);
+            // Return the transformed data as a JSON response with a 201 status code
+            return $hospitalResource->response()->setStatusCode(200);
+        }
+        else {
+            return response()->json(['message' => 'this hospital not available'], 404);
+        }
     }
 
     /**
@@ -137,29 +142,39 @@ class HospitalController extends Controller
     public function searchByName($name)
     {
         $hospital = $this->hospital::where('name','LIKE',$name)->get();
-        // Create a new UserResource instance
-        $hospitalResource = new HospitalResource($hospital);
-        // Return the transformed data as a JSON response with a 201 status code
-        return $hospitalResource->response()->setStatusCode(200);
+        if ($hospital->approved == 1 && $hospital->block == 0) {
+            // Create a new UserResource instance
+            $hospitalResource = HospitalResource::collection($hospital);
+            // Return the transformed data as a JSON response with a 201 status code
+            return $hospitalResource->response()->setStatusCode(200);
+        }
+        else {
+            return response()->json(['message' => 'this hospital not available'], 404);
+        }
     }
 
     // search by location
     public function searchByaddress($address)
     {
         $hospital = $this->hospital::where('address','LIKE',$address)->get();
-        // Create a new UserResource instance
-        $hospitalResource = new HospitalResource($hospital);
-        // Return the transformed data as a JSON response with a 201 status code
-        return $hospitalResource->response()->setStatusCode(200);
+        if ($hospital->approved == 1  && $hospital->block == 0) {
+            // Create a new UserResource instance
+            $hospitalResource = HospitalResource::collection($hospital);
+            // Return the transformed data as a JSON response with a 201 status code
+            return $hospitalResource->response()->setStatusCode(200);
+        }
+        else {
+            return response()->json(['message' => 'this hospital is not available'], 404);
+        }
     }
 
     // by default show hospitals in my locaton
     public function getdafaulthospitals()
     {
         $user = User::find(Auth::user()->id);
-        $hospital = $this->hospital::where('address','LIKE',$user->location)->get();
+        $hospital = $this->hospital::where('address','LIKE',$user->location)->where('approved', 1)->where('block', 0)->get();
         // Create a new UserResource instance
-        $hospitalResource = new HospitalResource($hospital);
+        $hospitalResource = HospitalResource::collection($hospital);
         // Return the transformed data as a JSON response with a 201 status code
         return $hospitalResource->response()->setStatusCode(200);
     }
