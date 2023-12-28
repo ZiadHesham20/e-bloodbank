@@ -13,4 +13,9 @@ class HospitalBlood extends Model
         'hospital_id',
         'blood_id',
     ];
+
+    public function blood()
+    {
+        return $this->belongsTo(Blood::class);
+    }
 }

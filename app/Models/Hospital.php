@@ -9,7 +9,7 @@ class Hospital extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $guarded = ['block', 'approved'];
 
     public function users()
     {

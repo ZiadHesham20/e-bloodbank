@@ -17,8 +17,8 @@ class HospitalController extends Controller
     public function __construct(Hospital $hospital)
     {
         $this->middleware('auth:sanctum')->except('index', 'show');
-        $this->middleware('HospitalAdmin')->only('update', 'destroy');
-        $this->middleware('SuperAdmin')->only('update', 'destroy', 'Approved', 'BlockHospital');
+        $this->middleware('HospitalAdmin')->only('update');
+        $this->middleware('SuperAdmin')->only('destroy', 'Approved', 'BlockHospital');
         $this->hospital = $hospital;
     }
     /**
