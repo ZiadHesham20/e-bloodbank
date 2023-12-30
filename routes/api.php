@@ -75,7 +75,9 @@ Route::apiResource('/diseases', DiseaseController::class);
 Route::apiResource('/medicines', MedicineController::class);
 
 Route::apiResource('/hospitals', HospitalController::class);
+Route::apiResource('/allHospitals', [HospitalController::class, 'allHospitals']);
 Route::get('/hospital/{name}',[HospitalController::class,'searchByName']);
+Route::get('/hospital/addEmployee/search{name}',[HospitalController::class,'searchByNameToAdd']);
 Route::get('/hospital/address/{address}',[HospitalController::class,'searchByaddress']);
 Route::get('/hospital/default/address',[HospitalController::class,'getdafaulthospitals']);
 Route::patch('/hospital/BlockHospital/{id}',[HospitalController::class,'BlockHospital']);

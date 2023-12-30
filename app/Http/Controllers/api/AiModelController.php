@@ -12,6 +12,8 @@ class AiModelController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+    //add user_id relation
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -19,6 +21,7 @@ class AiModelController extends Controller
             'recency' => 'required',
             'target' => 'required',
             'time' => 'required',
+            'user_id' => 'required'
         ]);
 
         $Aimodel = new AiModel();
@@ -28,6 +31,7 @@ class AiModelController extends Controller
             'recency' => $request->recency,
             'target' => $request->target,
             'time' => $request->time,
+            'user_id' => $request->user_id
         ]);
 
         return response()->json([

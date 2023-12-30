@@ -124,4 +124,9 @@ class User extends Authenticatable
         }
     }
 
+    public function Aimodel()
+    {
+        return $this->hasOne(AiModel::class);
+    }
+
 }

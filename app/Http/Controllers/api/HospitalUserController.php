@@ -20,7 +20,7 @@ class HospitalUserController extends Controller
 
         $this->middleware('HospitalAdmin')->only('requestBloods', 'hospitalFinishRequest');
         $this->middleware('Employee')->only('showDonorUser', 'MyHospitalRequests', 'MyHospitalUsersRequests', 'requestUserDone', 'hospitalPayment', 'hospitalFinishRequest', 'showUserRequestBloodsInHospital', 'UserRequestBloodsDone');
-        $this->middleware('Admin')->only('showUserRequestBloods', 'showHospitalsRequest', 'showUsersRequest', 'showRequest');
+        // $this->middleware('Admin')->only('showRequest');
         $this->request = $request;
     }
     // ->only('requestBloods', 'showDonorUser', 'MyHospitalRequests', 'MyHospitalUsersRequests', 'myUserRequests', 'requestDonate', 'hospitalPayment', 'requestUserDone', 'hospitalFinishRequest');

@@ -231,4 +231,11 @@ class HospitalController extends Controller
             return response('This action is unavailable', 409);
         }
     }
+
+    // for admin
+    public function allHospitals()
+    {
+        $hospitals = HospitalResource::collection($this->hospital::paginate(12));
+        return $hospitals->response()->setStatusCode(200);
+    }
 }

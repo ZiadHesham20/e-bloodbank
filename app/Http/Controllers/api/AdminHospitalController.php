@@ -115,4 +115,21 @@ class AdminHospitalController extends Controller
             return response()->json(['message' => "error"], 404);
         }
     }
+
+    public function searchByNameToAdd(Request $request)
+    {
+        $authUser = Auth::user();
+        // $hospitalId = $authUser->hospital_id;
+        if($authUser) {
+            $user = $this->user::where('name', 'like', "%$request->name%")->get();
+            // Create a new UserResource instance
+            $userResource = UserResource::collection($user);
+
+            // Return the transformed data as a JSON response with a 201 status code
+            return $userResource->response()->setStatusCode(200);
+        }
+        else {
+            return response()->json(['message' => "error"], 404);
+        }
+    }
 }
