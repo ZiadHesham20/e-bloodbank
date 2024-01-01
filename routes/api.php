@@ -10,6 +10,7 @@ use App\Http\Controllers\api\HospitalUserController;
 use App\Http\Controllers\api\MedicineController;
 use App\Http\Controllers\api\ReviewController;
 use App\Http\Controllers\api\UsersController;
+use App\Http\Controllers\BloodController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,8 @@ Route::get('/hospital/employee', [AdminHospitalController::class, 'indexEmployee
 Route::patch('/hospital/admin/addEmployee/{id}', [AdminHospitalController::class, 'addEmployee']);
 Route::patch('/hospital/admin/deleteEmployee/{id}', [AdminHospitalController::class, 'deleteEmployee']);
 Route::get('/hospital/employes/search', [AdminHospitalController::class, 'searchByName']);
+Route::get('/hospital/addEmployee/search{name}',[AdminHospitalController::class,'searchByNameToAdd']);
+
 
 Route::post('/hospital/request', [HospitalUserController::class, 'requestBloods']);
 Route::get('/hospital/donor', [HospitalUserController::class, 'showDonorUser']);
@@ -75,9 +78,9 @@ Route::apiResource('/diseases', DiseaseController::class);
 Route::apiResource('/medicines', MedicineController::class);
 
 Route::apiResource('/hospitals', HospitalController::class);
-Route::apiResource('/allHospitals', [HospitalController::class, 'allHospitals']);
+Route::get('/allHospitals', [HospitalController::class, 'allHospitals']);
+Route::get('/showHospitals/{id}', [HospitalController::class, 'showHospitals']);
 Route::get('/hospital/{name}',[HospitalController::class,'searchByName']);
-Route::get('/hospital/addEmployee/search{name}',[HospitalController::class,'searchByNameToAdd']);
 Route::get('/hospital/address/{address}',[HospitalController::class,'searchByaddress']);
 Route::get('/hospital/default/address',[HospitalController::class,'getdafaulthospitals']);
 Route::patch('/hospital/BlockHospital/{id}',[HospitalController::class,'BlockHospital']);
@@ -96,6 +99,9 @@ Route::get('/emergency-donates/{id}', [EmergencyDonateController::class, 'show']
 Route::delete('/emergency-donates/{id}', [EmergencyDonateController::class, 'destroy']);
 Route::post('/emergency-donates/response/{id}', [EmergencyDonateController::class, 'emergencyDonate']);
 Route::get('/emergency-donate/history', [EmergencyDonateController::class, 'history']);
+
+Route::get('/bloods', [BloodController::class, 'index']);
+Route::patch('/bloods/{id}', [BloodController::class, 'update']);
 
 require __DIR__.'/auth.php';
 

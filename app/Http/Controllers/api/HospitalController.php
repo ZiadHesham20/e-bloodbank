@@ -238,4 +238,14 @@ class HospitalController extends Controller
         $hospitals = HospitalResource::collection($this->hospital::paginate(12));
         return $hospitals->response()->setStatusCode(200);
     }
+
+    public function showHospitals($id)
+    {
+        $hospital = $this->hospital::find($id);
+            // Create a new UserResource instance
+            $hospitalResource = new HospitalResource($hospital);
+
+            // Return the transformed data as a JSON response with a 201 status code
+            return $hospitalResource->response()->setStatusCode(200);
+    }
 }
