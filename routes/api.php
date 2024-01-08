@@ -10,7 +10,7 @@ use App\Http\Controllers\api\HospitalUserController;
 use App\Http\Controllers\api\MedicineController;
 use App\Http\Controllers\api\ReviewController;
 use App\Http\Controllers\api\UsersController;
-use App\Http\Controllers\BloodController;
+use App\Http\Controllers\api\BloodController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

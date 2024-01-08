@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\BloodResource;
 use App\Models\Blood;
 use Illuminate\Http\Request;
@@ -29,7 +30,8 @@ class BloodController extends Controller
     public function update(Request $request, $id)
     {
         $blood = $this->blood::findOrFail($id);
-        $blood->update($request->price);
+        $blood->price = $request->price;
+        $blood->save();
         // Create a new UserResource instance
         $bloodResource = new BloodResource($blood);
 

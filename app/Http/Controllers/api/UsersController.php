@@ -79,8 +79,9 @@ class UsersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUsersRequest $request, User $user)
+    public function update(Request $request, $id)
     {
+        $user = $this->user::findOrFail($id);
         $user->update($request->all());
 
         $usersResource = new UserResource($user);
