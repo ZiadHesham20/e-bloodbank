@@ -17,7 +17,7 @@ class HospitalController extends Controller
     public function __construct(Hospital $hospital)
     {
         $this->middleware('auth:sanctum')->except('index', 'show');
-        $this->middleware('HospitalAdmin')->only('update');
+        $this->middleware('HospitalAdmin')->only('update', 'updateImage');
         $this->middleware('SuperAdmin')->only('destroy', 'Approved', 'BlockHospital');
         $this->hospital = $hospital;
     }
@@ -247,5 +247,23 @@ class HospitalController extends Controller
 
             // Return the transformed data as a JSON response with a 201 status code
             return $hospitalResource->response()->setStatusCode(200);
+    }
+
+    public function updateImage(Request $request)
+    {
+        $request->validate([
+            'profile_photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // image|mimes:jpeg,png,jpg,gif|max:2048
+        ]);
+
+        $user = Auth::user();
+        $hospital = $this->hospital::findOrFail($user->hospital_id);
+
+        if ($request->hasFile('cover_image')) {
+            $path = $request->file('cover_image')->store('cover_images', 'public');
+            $hospital->cover_image = $path;
+            $hospital->save();
+        }
+
+        return response()->json(['success' => 'Profile photo updated successfully.'], 200);
     }
 }

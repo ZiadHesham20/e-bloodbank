@@ -22,14 +22,14 @@ class HospitalBloodController extends Controller
         $this->hospitalBlood = $hospitalBlood;
     }
     public function addBlood(Request $request) {
-        $bloodId = $request->id;
+        $blood_id = $request->blood_id;
         $count = $request->count;
-        $hospitalId = Auth::user()->hospital_id;
+        $user = Auth::user();
         for($x = 0; $x < $count; $x++)
         {
             $hospitalBlood = new $this->hospitalBlood;
-            $hospitalBlood->hospital_id = $hospitalId;
-            $hospitalBlood->blood_id = $bloodId;
+            $hospitalBlood->hospital_id = $user->hospital_id;
+            $hospitalBlood->blood_id = $blood_id;
             $hospitalBlood->save();
         }
         return response()->json(['status' => 'success', 'message'=>'Added Blood Successfully'],201);

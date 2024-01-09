@@ -85,6 +85,7 @@ Route::get('/hospital/address/{address}',[HospitalController::class,'searchByadd
 Route::get('/hospital/default/address',[HospitalController::class,'getdafaulthospitals']);
 Route::patch('/hospital/BlockHospital/{id}',[HospitalController::class,'BlockHospital']);
 Route::patch('admin/hospital/approve/{id}', [HospitalController::class, 'Approved']);
+Route::post('hospital/updateImage', [HospitalController::class, 'updateImage']);
 
 
 Route::post('/reviews', [ReviewController::class, 'store']);
