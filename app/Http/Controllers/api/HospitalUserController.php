@@ -112,9 +112,9 @@ class HospitalUserController extends Controller
             // Check if the last donation was more than 6 months ago
             $lastDonation = Carbon::parse($user->donation_date); // Assuming you have a 'donations' relationship
 
-            if ($lastDonation->addMonths(6)->isPast()) {
-                $hospitalId = intval($request->hospital_id);
-                $blood_id = intval($request->blood_id);
+            if ($lastDonation->addMonths(6)->isPast() || $lastDonation == null) {
+                $hospitalId = $request->hospital_id;
+                $blood_id = $request->blood_id;
                 $req = new $this->request;
 
                 $req->type = 0;
@@ -123,6 +123,10 @@ class HospitalUserController extends Controller
                 $req->blood_id = $blood_id;
 
                 $req->save();
+
+                $lastDonation = Carbon::now();
+                $user->donation_date = $lastDonation;
+                $user->save();
                 // Create a new UserResource instance
                 $reqResource = new HospitalUserResource($req);
 
