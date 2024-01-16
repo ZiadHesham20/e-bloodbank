@@ -73,4 +73,5 @@ class DiseaseController extends Controller
         $this->disease::findOrFail($id)->delete();
         return response()->json(['message' => 'deleted'], 200);
     }
+
 }

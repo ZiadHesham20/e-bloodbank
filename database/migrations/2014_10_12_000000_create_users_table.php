@@ -24,6 +24,7 @@ return new class extends Migration
             $table->boolean('gender')->default(true); // true main male .. false main female
             $table->string('location');
             $table->dateTime('donation_date')->nullable();
+            $table->dateTime('emergency_donor')->default(0); // if = 0 -> user not emergency else he is 
             $table->boolean('donatable')->default(0); // 0 -> disable to donate  -- 1 -> able to donate
             $table->integer('role')->default(0);  // 0 -> default user | 1 -> admin | 2 -> super admin.
             $table->integer('points')->default(0);

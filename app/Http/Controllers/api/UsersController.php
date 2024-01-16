@@ -11,6 +11,7 @@ use App\Http\Resources\UsersResource;
 use App\Models\EmergencyDonate;
 use App\Models\EmergencyRequest;
 use App\Models\Hospital;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -26,6 +27,7 @@ class UsersController extends Controller
         $this->middleware('auth:sanctum');
         $this->middleware('Admin')->except('show', 'index', 'update', 'destroy');
         $this->middleware('SuperAdmin')->only('destroy');
+        $this->middleware('HospitalAdmin')->only('makeUserEmergencyDonor', 'deleteUserEmergencyDonor');
     }
     /**
      * Display a listing of the resource.
@@ -189,5 +191,27 @@ class UsersController extends Controller
 
         return response()->json(['success' => 'Profile photo updated successfully.'], 200);
     }
+
+    // add emergency donor to users table
+    public function makeUserEmergencyDonor($id) {
+        $user = $this->user::findOrFail($id);
+        $user->emergency_donor = 1;
+        $user->save();
+        return response()->json(['message' => 'done'], 200);
+    }
+
+    public function deleteUserEmergencyDonor($id) {
+        $user = $this->user::findOrFail($id);
+        $user->emergency_donor = 0;
+        $user->save();
+        return response()->json(['message' => 'done'], 200);
+    }
+
+    public function showEmergencyDonors()
+    {
+        $users = UserResource::collection($this->user::where('emergency_donor', 1)->paginate(12));
+        return $users->response()->setStatusCode(200);
+    }
+
 }
 

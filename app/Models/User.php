@@ -95,6 +95,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Hospital::class, 'hospital_users');
     }
 
+    public function userDiesese()
+    {
+        return $this->hasOne(UserDiesese::class);
+    }
+
     public function isHospitalAdmin()
     {
         return $this->role == 1;

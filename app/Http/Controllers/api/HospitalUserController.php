@@ -43,7 +43,7 @@ class HospitalUserController extends Controller
         $req->user_id = $user->id;
         $req->hospital_id = $hospitalId;
         $req->blood_id = $request->blood_id;
-        $req->count = $request->count;;
+        $req->count = $request->count;
 
         $req->save();
 

@@ -11,6 +11,7 @@ use App\Http\Controllers\api\MedicineController;
 use App\Http\Controllers\api\ReviewController;
 use App\Http\Controllers\api\UsersController;
 use App\Http\Controllers\api\BloodController;
+use App\Http\Controllers\api\UserDieseseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +37,9 @@ Route::patch('admin/users/{id}/changeToAdmin', [UsersController::class, 'changeR
 Route::patch('admin/users/{id}/changeToSuperAdmin', [UsersController::class, 'changeRoleToSuperAdmin']);
 Route::patch('admin/users/{id}/changeToDefaultUser', [UsersController::class, 'changeRoleToDefualtUser']);
 Route::post('users/update-profile', [UsersController::class, 'updateProfile']);
+Route::patch('users/addEmergencyDonor', [UsersController::class, 'makeUserEmergencyDonor']);
+Route::patch('users/deleteEmergencyDonor-profile', [UsersController::class, 'deleteUserEmergencyDonor']);
+Route::get('users/emergencyDonor', [UsersController::class, 'showEmergencyDonors']);
 
 Route::apiResource('/hospitals/admin', AdminHospitalController::class);
 Route::patch('/hospital/admin/{id}/changeRole', [AdminHospitalController::class, 'changeRole']);
@@ -103,6 +107,8 @@ Route::get('/emergency-donate/history', [EmergencyDonateController::class, 'hist
 
 Route::get('/bloods', [BloodController::class, 'index']);
 Route::patch('/bloods/{id}', [BloodController::class, 'update']);
+
+Route::apiResource('/userDiseses', UserDieseseController::class);
 
 require __DIR__.'/auth.php';
 

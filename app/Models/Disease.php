@@ -15,4 +15,9 @@ class Disease extends Model
     {
         return $this->belongsToMany(User::class, 'user_diseases');
     }
+
+    public function userDiesese()
+    {
+        return $this->hasOne(UserDiesese::class);
+    }
 }
