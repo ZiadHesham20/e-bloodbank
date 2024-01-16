@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\UserDisease;
+use App\Models\UserDiesese;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,6 +13,6 @@ class UserDiseaseSeeder extends Seeder
      */
     public function run(): void
     {
-        UserDisease::factory()->count(50)->create();
+        UserDiesese::factory()->count(50)->create();
     }
 }
