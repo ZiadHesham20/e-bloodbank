@@ -60,6 +60,11 @@ class EmergencyDonateController extends Controller
         $donate->user_id = $user->id; // Use the user's ID
         $donate->emergency_id = $emergencyRequest->id;
         $donate->save();
+        $emergencyRequest->quantity-= 1;
+        if ($emergencyRequest->quantity == 0) {
+            $emergencyRequest->done = 1;
+        }
+        $emergencyRequest->save();
 
         // Create a new UserResource instance
         $donateResource = new EmergencyDonateResource($$donate);
